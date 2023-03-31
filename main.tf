@@ -55,7 +55,7 @@ resource "aws_internet_gateway" "igw" {
   )
 }
 
-resource "aws_route_table" "example" {
+resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
   route {
@@ -74,6 +74,25 @@ resource "aws_route_table" "example" {
     { Name = "${var.env}-public-route-table" }
   )
 }
+
+
+resource "aws_route_table_association" "public-rt-assoc" {
+  count          = length(aws_subnet.public)
+  subnet_id      = aws_subnet.public.*.id[count.index]
+  route_table_id = aws_route_table.public.id
+}
+
+
+
+
+
+
+
+
+
+
+
+
 #// create EC2 instance
 #
 #
